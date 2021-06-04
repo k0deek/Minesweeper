@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="570.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GameController">
+   <children>
+      <Button fx:id="returnButton" layoutX="14.0" layoutY="495.0" mnemonicParsing="false" onAction="#clickedReturn" text="&lt; Return to menu" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="14.0" />
+      <Label fx:id="timeField" layoutX="319.0" layoutY="495.0" prefHeight="39.0" prefWidth="152.0" AnchorPane.bottomAnchor="36.0" AnchorPane.rightAnchor="14.0">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Pane fx:id="gameField" layoutX="14.0" layoutY="14.0" onMouseClicked="#clickedTile" prefHeight="457.0" prefWidth="457.0" />
+   </children>
+</AnchorPane>

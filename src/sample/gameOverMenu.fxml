@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="216.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GameOverController">
+   <children>
+      <Label layoutX="15.0" layoutY="14.0" prefHeight="92.0" prefWidth="319.0" text="Game Over" textAlignment="CENTER">
+         <font>
+            <Font name="Segoe UI Semilight" size="63.0" />
+         </font>
+      </Label>
+      <Button fx:id="PlayAgain" layoutX="15.0" layoutY="163.0" mnemonicParsing="false" onAction="#clickedPlay" prefHeight="36.0" prefWidth="319.0" text="Play again" />
+      <Button fx:id="returnToMenu" layoutX="15.0" layoutY="117.0" mnemonicParsing="false" onAction="#clickedReturn" prefHeight="39.0" prefWidth="319.0" text="Return to menu" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="351.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.WinGameMenuController">
+   <children>
+      <Label layoutX="46.0" layoutY="14.0" prefHeight="92.0" prefWidth="258.0" text="You won!" textAlignment="CENTER">
+         <font>
+            <Font name="Segoe UI Semilight" size="63.0" />
+         </font>
+      </Label>
+      <Button fx:id="PlayAgain" layoutX="16.0" layoutY="276.0" mnemonicParsing="false" onAction="#clickedPlay" prefHeight="36.0" prefWidth="319.0" text="Play again" />
+      <Button fx:id="returnToMenu" layoutX="16.0" layoutY="230.0" mnemonicParsing="false" onAction="#clickedReturn" prefHeight="39.0" prefWidth="319.0" text="Return to menu" />
+      <TextField fx:id="nameField" layoutX="148.0" layoutY="106.0" onAction="#typedName" prefHeight="39.0" prefWidth="177.0" />
+      <Label layoutX="25.0" layoutY="106.0" prefHeight="39.0" prefWidth="116.0" text="Your name:" />
+      <Label layoutX="25.0" layoutY="156.0" prefHeight="39.0" prefWidth="94.0" text="Your score:" />
+      <Label fx:id="scoreField" layoutX="148.0" layoutY="156.0" prefHeight="39.0" prefWidth="177.0" />
+   </children>
+</AnchorPane>

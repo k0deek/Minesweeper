@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="348.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AboutController">
+   <padding>
+      <Insets bottom="60.0" left="20.0" right="20.0" top="40.0" />
+   </padding>
+   <children>
+      <Label layoutX="108.0" layoutY="14.0" text="About">
+         <font>
+            <Font name="Segoe UI Semilight" size="50.0" />
+         </font>
+         <padding>
+            <Insets top="40.0" />
+         </padding>
+      </Label>
+      <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="52.0" layoutY="178.0" prefHeight="328.0" prefWidth="266.0" text="Classic minesweeper from 2nd year student. &#10;&#10;Thanks for playing!&#10;&#10;You can contact me: dddazerrr@gmail.com &#10;vk.com/itsphotokod" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="100.0" />
+      <Button fx:id="returnButton" layoutX="126.0" layoutY="418.0" mnemonicParsing="false" onAction="#returnClicked" prefHeight="39.0" prefWidth="97.0" text="&lt; Return">
+         <font>
+            <Font name="Segoe UI Semilight" size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
