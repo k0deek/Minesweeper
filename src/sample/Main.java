@@ -7,9 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
+import sample.*;
+import java.awt.image.SampleModel;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class Main extends Application {
 
@@ -27,8 +30,13 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args) {
-
-        launch(args);
+    public static void main(String[] args) throws IOException {
+        System.out.println(args.length);
+        if(args.length == 0)
+            launch(args);
+        else
+        {
+            TextController textgame = new TextController();
+        }
     }
 }

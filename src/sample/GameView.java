@@ -23,6 +23,7 @@ import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameView {
@@ -47,7 +48,21 @@ public class GameView {
     public static int countTiles = 0;
     public static int countMarkedBombs = 0;
 
+    MineState[][] mineField;
+    CellState[][] userField;
+    Integer[][] userMineField;
+    Integer lengthField = 0;
+    Integer countKnown = 0;
+    public enum CellState {
+        UNKNOWN,
+        KNOWN,
+        FLAG
+    }
 
+    public enum MineState {
+        MINE,
+        NOT_MINE
+    }
     public Parent initialize(int num_x, int num_y, int num_bomb) throws IOException {
         this.num_bomb = num_bomb;
         isEnd = false;
@@ -93,7 +108,31 @@ public class GameView {
         return parent;
     }
 
-    private void plantBombs(int tilex, int tiley){
+    public void initialize1(int howmuch, int num_bomb) throws IOException {
+        this.num_bomb = num_bomb;
+        isEnd = false;
+        lengthField = howmuch;
+        X_TILES = lengthField;
+        Y_TILES = lengthField;
+
+        countMarkedBombs = 0;
+        countOpened = 0;
+        countTiles = 0;
+
+        countTiles = X_TILES * Y_TILES;
+        Tile.TILE_SIZE = WIDTH / X_TILES;
+        Tile.TILE_SIZE = WIDTH / Y_TILES;
+        grid = new Tile[X_TILES][Y_TILES];
+
+        for (int y = 0; y < Y_TILES; y++){
+            for (int x = 0; x < X_TILES; x++){
+                Tile tile = new Tile(x, y, false);
+                grid[x][y] = tile;
+            }
+        }
+    }
+
+    public void plantBombs(int tilex, int tiley){
         int countBombs = 0;
         while(countBombs < num_bomb){
             int x = (int) (Math.random() * X_TILES);
@@ -224,4 +263,67 @@ public class GameView {
             }
         }
     }
+
+    public Integer[][] getUserMineField(GameView model) {
+        userMineField = new Integer[lengthField][lengthField];
+        for (int i = 0; i < lengthField; i++) {
+            for (int j = 0; j < lengthField; j++) {
+                if (model.grid[i][j].isMarked)
+                    userMineField[i][j] = -1;
+                else if (model.grid[i][j].isOpened) {
+                    int count = 0;
+                    for (int k = -1; k <= 1; ++k)
+                        for (int m = -1; m <= 1; ++m)
+                            if ((i + k >= 0) && (i + k < lengthField) && (j + m >= 0) && (j + m < lengthField))
+                                if (mineField[i + k][j + m] == MineState.MINE)
+                                    count++;
+                    userMineField[i][j] = count;
+                }
+                else  {
+                    userMineField[i][j] = -5;
+                }
+                if (isEnd == true && mineField[i][j] == MineState.MINE)
+                    userMineField[i][j] = -10;
+            }
+        }
+        return userMineField;
+    }
+
+    public Integer getLengthField() {
+        return lengthField;
+    }
+
+    public Integer getMinesCount() {
+        return num_bomb;
+    }
+
+    public Integer getCountKnown() {
+        return countKnown;
+    }
+
+    public void makeFlag(String xs, String ys) {
+        int x = Integer.parseInt(xs.trim());
+        int y = Integer.parseInt(ys.trim());
+        if (userField[x][y] == CellState.KNOWN) {
+            ;
+        } else if (userField[x][y] == CellState.FLAG) {
+            userField[x][y] = CellState.UNKNOWN;
+        } else {
+            userField[x][y] = CellState.FLAG;
+        }
+    }
+
+    public CellState[][] generateUserField() {
+        userField = new CellState[lengthField][lengthField];
+        for (int i = 0; i < lengthField; i++) {
+            for (int j = 0; j < lengthField; j++) {
+                userField[i][j] = CellState.UNKNOWN;
+            }
+        }
+        return userField;
+    }
+
+
+
+
 }
