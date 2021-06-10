@@ -32,7 +32,7 @@ public class GameController {
     public Pane gameField = new Pane();
     public Label timeField;
 
-    boolean isWindowOpened = false;
+    public static boolean isWindowOpened = false;
 
 
     public static GameView gameView = new GameView();

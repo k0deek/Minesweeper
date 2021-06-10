@@ -61,7 +61,8 @@ public class Tile extends StackPane {
         if (countMarkedBombs == num_bomb){
             gameView.isWin = true;
             gameView.isEnd = true;
-            gameView.gameController.winGame();
+            if(GameController.isWindowOpened == true)
+                gameView.gameController.winGame();
         }
     }
 

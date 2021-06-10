@@ -266,4 +266,9 @@ public class GameView {
     public int getCountKnown() {
         return countOpened;
     }
+
+
+
+
+
 }
