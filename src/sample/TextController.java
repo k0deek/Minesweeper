@@ -23,11 +23,11 @@ public class TextController {
     public void showGameField(int lengthField, Tile [][] grid) {
         for (int i = 0; i < lengthField; ++i) {
             for (int j = 0; j < lengthField; ++j) {
-                if (!grid[i][j].isOpened)
+                if (grid[i][j].isMarked)
+                    System.out.print("f");
+                else if (!grid[i][j].isOpened)
                     //System.out.print(grid[i][j].countBomb);
                     System.out.print("#");
-                else if (grid[i][j].isMarked)
-                    System.out.print("f");
                 else if (grid[i][j].countBomb >= 0 && grid[i][j].countBomb <= 9)
                     System.out.print(grid[i][j].countBomb);
             }
@@ -42,10 +42,10 @@ public class TextController {
         System.out.println("open + field");
         System.out.println("flag + field");
         System.out.println("New game");
+
         int size = model.getLengthField();
         int minesCount = model.getMinesCount();
         Scanner scan = new Scanner(System.in);
-        //while (GameView.countMarkedBombs < size*size - minesCount) {
         do{
             showGameField(size, GameView.grid);
             System.out.println("Enter your command");
@@ -60,8 +60,8 @@ public class TextController {
                 System.out.println("Commands:\n");
                 System.out.println("help\n");
                 System.out.println("exit\n");
-                System.out.println("open + field\n");
-                System.out.println("flag + field\n");
+                System.out.println("open + side side - example: open 1 1\n");
+                System.out.println("flag + side side - example: flag 1 1\n");
                 System.out.println("new game\n");
             }
 
@@ -73,49 +73,42 @@ public class TextController {
                 Tile thisTile = GameView.grid[x][y];
                 System.out.print(thisTile.x);
                 System.out.println(thisTile.y);
-                if (thisTile.hasBomb && !thisTile.isMarked) return ExitFlag;
+                if (thisTile.hasBomb && !thisTile.isMarked) return NewGameFlag;
                 else if (!thisTile.isOpened && !thisTile.isMarked) gameView.openTiles(thisTile);
                 else if (thisTile.isOpened) System.out.println("This is already pointed point! Choose another command\n");
 
             }
             if (comArgs[0].equals("flag")) {
                 Tile thisTile = GameView.grid[x][y];
-                if (!thisTile.isMarked){
-                    thisTile.isMarked = true;
-                    thisTile.mark();
-                }
-                else {
-                    thisTile.isMarked = false;
-                    thisTile.blank();
-                }
-                GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())].mark();
+                if (!thisTile.isOpened) {
+                    if (!thisTile.isMarked) {
+                        thisTile.isMarked = true;
+                        thisTile.mark();
+                    } else {
+                        thisTile.isMarked = false;
+                        thisTile.blank();
+                    }
+                } else System.out.println("This point is already open!");
             }
-            System.out.println(GameView.countOpened);
-            System.out.println(size*size - minesCount);
         }while (!(GameView.countMarkedBombs == minesCount) && !(GameView.countOpened == size*size - minesCount));
         return ExitFlag;
     }
 
     public TextController() throws IOException {
-        GameView model = new GameView();
         Scanner scan = new Scanner(System.in);
-        System.out.println("Enter length of field: ");
+        System.out.println("Enter length of side: ");
         int howmuch = scan.nextInt();
         System.out.println("Enter count of mines: ");
         int minesCount = scan.nextInt();
-        model.initialize1(howmuch, minesCount);
         int exit_status;
         do {
+            GameView model = new GameView();
+            model.initialize1(howmuch, minesCount);
             exit_status = doGame(model);
 
         } while (exit_status != 0);
-        if (model.getCountKnown() >= model.getLengthField() * model.getLengthField() - model.getMinesCount()) {
+        if ((GameView.countMarkedBombs == minesCount) || (GameView.countOpened == howmuch*howmuch - minesCount)) {
             System.out.println("You win!");
         }
-
-
     }
-
-
-
 }
