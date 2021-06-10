@@ -45,7 +45,8 @@ public class TextController {
         int size = model.getLengthField();
         int minesCount = model.getMinesCount();
         Scanner scan = new Scanner(System.in);
-        while (GameView.countMarkedBombs < size*size - minesCount) {
+        //while (GameView.countMarkedBombs < size*size - minesCount) {
+        do{
             showGameField(size, GameView.grid);
             System.out.println("Enter your command");
             String turn = scan.nextLine();
@@ -68,8 +69,6 @@ public class TextController {
             comArgs = turn.split(" ");
             int x = Integer.parseInt(comArgs[1].trim());
             int y = Integer.parseInt(comArgs[2].trim());
-            if (x > model.X_TILES) x--;
-            if (y > model.Y_TILES) y--;
             if (comArgs[0].equals("open")) {
                 Tile thisTile = GameView.grid[x][y];
                 System.out.print(thisTile.x);
@@ -91,7 +90,9 @@ public class TextController {
                 }
                 GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())].mark();
             }
-        }
+            System.out.println(GameView.countOpened);
+            System.out.println(size*size - minesCount);
+        }while (!(GameView.countMarkedBombs == minesCount) && !(GameView.countOpened == size*size - minesCount));
         return ExitFlag;
     }
 
