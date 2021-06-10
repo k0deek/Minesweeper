@@ -19,37 +19,34 @@ public class TextController {
     final int ExitFlag = 0;
     final int NewGameFlag = 1;
 
-    public void showGameField(int lengthField, Integer[][] userMineField) {
+
+    public void showGameField(int lengthField, Tile [][] grid) {
         for (int i = 0; i < lengthField; ++i) {
             for (int j = 0; j < lengthField; ++j) {
-                if (userMineField[i][j] == -5)
+                if (!grid[i][j].isOpened)
+                    //System.out.print(grid[i][j].countBomb);
                     System.out.print("#");
-                if (userMineField[i][j] == -1)
+                else if (grid[i][j].isMarked)
                     System.out.print("f");
-                if (userMineField[i][j] >= 0 && userMineField[i][j] <= 9)
-                    System.out.print(userMineField[i][j]);
+                else if (grid[i][j].countBomb >= 0 && grid[i][j].countBomb <= 9)
+                    System.out.print(grid[i][j].countBomb);
             }
             System.out.println("\n");
         }
     }
 
-
-
     public int doGame(GameView model) throws IOException {
-        System.out.println("Commands:\n");
-        System.out.println("help\n");
-        System.out.println("exit\n");
-        System.out.println("open + field\n");
-        System.out.println("flag + field\n");
-        System.out.println("New game\n");
+        System.out.println("Commands:");
+        System.out.println("help");
+        System.out.println("exit");
+        System.out.println("open + field");
+        System.out.println("flag + field");
+        System.out.println("New game");
         int size = model.getLengthField();
         int minesCount = model.getMinesCount();
         Scanner scan = new Scanner(System.in);
-        model.plantBombs(size, size);
-        Integer[][] userMineField= model.getUserMineField(model);
-        GameView.CellState[][] userField = model.generateUserField();
-        while (model.countMarkedBombs < size*size - minesCount) {
-            showGameField(size, userMineField);
+        while (GameView.countMarkedBombs < size*size - minesCount) {
+            showGameField(size, GameView.grid);
             System.out.println("Enter your command");
             String turn = scan.nextLine();
             if (turn.equals("exit")) {
@@ -70,14 +67,17 @@ public class TextController {
             String[] comArgs;
             comArgs = turn.split(" ");
             if (comArgs[0].equals("open")) {
-                Tile thisTile = model.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())];
-                if (thisTile.hasBomb && !thisTile.isMarked) return 1;
+                Tile thisTile = GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())];
+                System.out.print(thisTile.x);
+                System.out.println(thisTile.y);
+
+                if (thisTile.hasBomb && !thisTile.isMarked) return ExitFlag;
                 else if (!thisTile.isOpened && !thisTile.isMarked) gameView.openTiles(thisTile);
                 else if (thisTile.isOpened) System.out.println("This is already pointed point! Choose another command\n");
 
             }
             if (comArgs[0].equals("flag")) {
-                Tile thisTile = model.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())];
+                Tile thisTile = GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())];
                 if (!thisTile.isMarked){
                     thisTile.isMarked = true;
                     thisTile.mark();
@@ -86,7 +86,7 @@ public class TextController {
                     thisTile.isMarked = false;
                     thisTile.blank();
                 }
-                model.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())].mark();
+                GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())].mark();
             }
         }
         return ExitFlag;
