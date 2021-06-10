@@ -29,8 +29,8 @@ import java.util.Random;
 public class GameView {
     public int WIDTH = 457;
     public int HEIGHT = 457;
-    public int X_TILES;
-    public int Y_TILES;
+    public static int X_TILES;
+    public static int Y_TILES;
     private boolean isFirstClick = true;
     public boolean isEnd = false;
     public boolean isWin = false;
@@ -47,11 +47,12 @@ public class GameView {
     public static int countOpened = 0;
     public static int countTiles = 0;
     public static int countMarkedBombs = 0;
-    
+
     Integer lengthField = 0;
- 
-  
+
+
     public Parent initialize(int num_x, int num_y, int num_bomb) throws IOException {
+        GameController.isWindowOpened = true;
         GameView.num_bomb = num_bomb;
         isEnd = false;
         isFirstClick = true;
@@ -96,17 +97,16 @@ public class GameView {
         return parent;
     }
 
-    public void initialize1(int howmuch, int num_bomb) throws IOException {
+    public void initialize(int howmuch, int num_bomb) throws IOException {
         GameView.num_bomb = num_bomb;
         isEnd = false;
+        isFirstClick = true;
         lengthField = howmuch;
         X_TILES = lengthField;
         Y_TILES = lengthField;
-
         countMarkedBombs = 0;
         countOpened = 0;
         countTiles = 0;
-
         countTiles = X_TILES * Y_TILES;
         Tile.TILE_SIZE = WIDTH / X_TILES;
         Tile.TILE_SIZE = WIDTH / Y_TILES;
@@ -190,6 +190,7 @@ public class GameView {
         if (X_TILES * Y_TILES - countOpened == num_bomb){
             isWin = true;
             isEnd = true;
+            if (GameController.isWindowOpened == true)
             gameController.winGame();
         }
 
@@ -220,7 +221,8 @@ public class GameView {
                     if (X_TILES * Y_TILES - countOpened == num_bomb){
                         isWin = true;
                         isEnd = true;
-                        gameController.winGame();
+                        if (GameController.isWindowOpened)
+                            gameController.winGame();
                     }
                     if (grid[newX][newY].isEmpty) openNeighbors(grid[newX][newY]);
                 }
@@ -251,7 +253,7 @@ public class GameView {
         }
     }
 
-    
+
 
     public Integer getLengthField() {
         return lengthField;
@@ -264,9 +266,4 @@ public class GameView {
     public int getCountKnown() {
         return countOpened;
     }
-    
-
-
-
-
 }
