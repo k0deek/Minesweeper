@@ -103,8 +103,10 @@ public class TextController {
         int exit_status;
         do {
             GameView model = new GameView();
-            model.initialize1(howmuch, minesCount);
+            model.initialize(howmuch, minesCount);
             exit_status = doGame(model);
+            if (exit_status == 1)
+                System.out.println("You lose!");
 
         } while (exit_status != 0);
         if ((GameView.countMarkedBombs == minesCount) || (GameView.countOpened == howmuch*howmuch - minesCount)) {
