@@ -66,18 +66,21 @@ public class TextController {
 
             String[] comArgs;
             comArgs = turn.split(" ");
+            int x = Integer.parseInt(comArgs[1].trim());
+            int y = Integer.parseInt(comArgs[2].trim());
+            if (x > model.X_TILES) x--;
+            if (y > model.Y_TILES) y--;
             if (comArgs[0].equals("open")) {
-                Tile thisTile = GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())];
+                Tile thisTile = GameView.grid[x][y];
                 System.out.print(thisTile.x);
                 System.out.println(thisTile.y);
-
                 if (thisTile.hasBomb && !thisTile.isMarked) return ExitFlag;
                 else if (!thisTile.isOpened && !thisTile.isMarked) gameView.openTiles(thisTile);
                 else if (thisTile.isOpened) System.out.println("This is already pointed point! Choose another command\n");
 
             }
             if (comArgs[0].equals("flag")) {
-                Tile thisTile = GameView.grid[Integer.parseInt(comArgs[1].trim())][Integer.parseInt(comArgs[2].trim())];
+                Tile thisTile = GameView.grid[x][y];
                 if (!thisTile.isMarked){
                     thisTile.isMarked = true;
                     thisTile.mark();
