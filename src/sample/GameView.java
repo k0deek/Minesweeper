@@ -41,30 +41,18 @@ public class GameView {
     public Stage gameStage;
     public static Tile [][] grid;
 
-    private int[] timeArr = {0};
+    private final int[] timeArr = {0};
     private Timeline timeline;
 
     public static int countOpened = 0;
     public static int countTiles = 0;
     public static int countMarkedBombs = 0;
-
-    MineState[][] mineField;
-    CellState[][] userField;
-    Integer[][] userMineField;
+    
     Integer lengthField = 0;
-    Integer countKnown = 0;
-    public enum CellState {
-        UNKNOWN,
-        KNOWN,
-        FLAG
-    }
-
-    public enum MineState {
-        MINE,
-        NOT_MINE
-    }
+ 
+  
     public Parent initialize(int num_x, int num_y, int num_bomb) throws IOException {
-        this.num_bomb = num_bomb;
+        GameView.num_bomb = num_bomb;
         isEnd = false;
         isFirstClick = true;
         X_TILES = num_x;
@@ -109,7 +97,7 @@ public class GameView {
     }
 
     public void initialize1(int howmuch, int num_bomb) throws IOException {
-        this.num_bomb = num_bomb;
+        GameView.num_bomb = num_bomb;
         isEnd = false;
         lengthField = howmuch;
         X_TILES = lengthField;
@@ -153,8 +141,7 @@ public class GameView {
                 tile.neighbors = getNeighbors(tile);
                 long bombs = tile.neighbors.stream().filter(t -> t.hasBomb).count();
                 tile.text.setText(bombs == 0?  "" : String.valueOf(bombs));
-                if (bombs == 0) tile.isEmpty = true;
-                else tile.isEmpty = false;
+                tile.isEmpty = bombs == 0;
                 tile.countBomb = (int)bombs;
 
             }
@@ -264,30 +251,7 @@ public class GameView {
         }
     }
 
-    public Integer[][] getUserMineField(GameView model) {
-        userMineField = new Integer[lengthField][lengthField];
-        for (int i = 0; i < lengthField; i++) {
-            for (int j = 0; j < lengthField; j++) {
-                if (model.grid[i][j].isMarked)
-                    userMineField[i][j] = -1;
-                else if (model.grid[i][j].isOpened) {
-                    int count = 0;
-                    for (int k = -1; k <= 1; ++k)
-                        for (int m = -1; m <= 1; ++m)
-                            if ((i + k >= 0) && (i + k < lengthField) && (j + m >= 0) && (j + m < lengthField))
-                                if (mineField[i + k][j + m] == MineState.MINE)
-                                    count++;
-                    userMineField[i][j] = count;
-                }
-                else  {
-                    userMineField[i][j] = -5;
-                }
-                if (isEnd == true && mineField[i][j] == MineState.MINE)
-                    userMineField[i][j] = -10;
-            }
-        }
-        return userMineField;
-    }
+    
 
     public Integer getLengthField() {
         return lengthField;
@@ -297,31 +261,10 @@ public class GameView {
         return num_bomb;
     }
 
-    public Integer getCountKnown() {
-        return countKnown;
+    public int getCountKnown() {
+        return countOpened;
     }
-
-    public void makeFlag(String xs, String ys) {
-        int x = Integer.parseInt(xs.trim());
-        int y = Integer.parseInt(ys.trim());
-        if (userField[x][y] == CellState.KNOWN) {
-            ;
-        } else if (userField[x][y] == CellState.FLAG) {
-            userField[x][y] = CellState.UNKNOWN;
-        } else {
-            userField[x][y] = CellState.FLAG;
-        }
-    }
-
-    public CellState[][] generateUserField() {
-        userField = new CellState[lengthField][lengthField];
-        for (int i = 0; i < lengthField; i++) {
-            for (int j = 0; j < lengthField; j++) {
-                userField[i][j] = CellState.UNKNOWN;
-            }
-        }
-        return userField;
-    }
+    
 
 
 
