@@ -1,5 +1,5 @@
 package sample;
-
+/*
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,22 +19,6 @@ public class TextController {
     final int ExitFlag = 0;
     final int NewGameFlag = 1;
 
-
-    public void showGameField(int lengthField, Tile [][] grid) {
-        for (int i = 0; i < lengthField; ++i) {
-            for (int j = 0; j < lengthField; ++j) {
-                if (grid[i][j].isMarked)
-                    System.out.print("f");
-                else if (!grid[i][j].isOpened)
-                    //System.out.print(grid[i][j].countBomb);
-                    System.out.print("#");
-                else if (grid[i][j].countBomb >= 0 && grid[i][j].countBomb <= 9)
-                    System.out.print(grid[i][j].countBomb);
-            }
-            System.out.println("\n");
-        }
-    }
-
     public int doGame(GameView model) throws IOException {
         System.out.println("Commands:");
         System.out.println("help");
@@ -47,7 +31,7 @@ public class TextController {
         int minesCount = model.getMinesCount();
         Scanner scan = new Scanner(System.in);
         do{
-            showGameField(size, GameView.grid);
+            GameView.showGameField(size);
             System.out.println("Enter your command");
             String turn = scan.nextLine();
             if (turn.equals("exit")) {
@@ -71,10 +55,8 @@ public class TextController {
             int y = Integer.parseInt(comArgs[2].trim());
             if (comArgs[0].equals("open")) {
                 Tile thisTile = GameView.grid[x][y];
-                System.out.print(thisTile.x);
-                System.out.println(thisTile.y);
                 if (thisTile.hasBomb && !thisTile.isMarked) return NewGameFlag;
-                else if (!thisTile.isOpened && !thisTile.isMarked) gameView.openTiles(thisTile);
+                else if (!thisTile.isOpened && !thisTile.isMarked) thisTile.openTiles(thisTile);
                 else if (thisTile.isOpened) System.out.println("This is already pointed point! Choose another command\n");
 
             }
@@ -113,4 +95,4 @@ public class TextController {
             System.out.println("You win!");
         }
     }
-}
+}*/

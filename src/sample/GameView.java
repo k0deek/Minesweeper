@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 
+
 public class GameView {
     public int WIDTH = 457;
     public int HEIGHT = 457;
@@ -37,10 +38,8 @@ public class GameView {
     public static int num_bomb;
     public GameController gameController;
     public int score = 1000;
-
     public Stage gameStage;
     public static Tile [][] grid;
-
     private final int[] timeArr = {0};
     private Timeline timeline;
 
@@ -65,7 +64,9 @@ public class GameView {
         countTiles = X_TILES * Y_TILES;
         Tile.TILE_SIZE = WIDTH / num_x;
         Tile.TILE_SIZE = WIDTH / Y_TILES;
+
         grid = new Tile[X_TILES][Y_TILES];
+
         FXMLLoader loader = new FXMLLoader();
         Parent parent = loader.load(getClass().getResource("game.fxml").openStream());
         gameController = loader.getController();
@@ -120,140 +121,25 @@ public class GameView {
         }
     }
 
-    public void plantBombs(int tilex, int tiley){
-        int countBombs = 0;
-        while(countBombs < num_bomb){
-            int x = (int) (Math.random() * X_TILES);
-            int y = (int) (Math.random() * Y_TILES);
-            if (!grid[x][y].hasBomb && !(x == tilex && y == tiley)){
-                grid[x][y].hasBomb = true;
-                grid[x][y].text.setText("X");
-                countBombs++;
-            }
-        }
-
-        for (int y = 0; y < Y_TILES; y++){
-            for (int x = 0; x < X_TILES; x++){
-                Tile tile = grid[x][y];
-
-                if (tile.hasBomb) continue;
-
-                tile.neighbors = getNeighbors(tile);
-                long bombs = tile.neighbors.stream().filter(t -> t.hasBomb).count();
-                tile.text.setText(bombs == 0?  "" : String.valueOf(bombs));
-                tile.isEmpty = bombs == 0;
-                tile.countBomb = (int)bombs;
-
-            }
-        }
-    }
-
-    private List<Tile> getNeighbors(Tile tile){
-        List<Tile> neighbors = new ArrayList<>();
-
-        int[] points = new int[] {
-           -1, -1,
-           -1, 0,
-           -1, 1,
-            0, -1,
-            0, 1,
-            1, -1,
-            1, 0,
-            1, 1
-        };
-        for (int i = 0; i < points.length; i++){
-            int dx = points[i];
-            int dy = points[++i];
-
-            int newX = tile.x + dx;
-            int newY = tile.y + dy;
-
-            if (newX >= 0 && newX < X_TILES && newY >= 0 && newY < Y_TILES){
-                neighbors.add(grid[newX][newY]);
-            }
-        }
-
-        return neighbors;
-    }
-
-
-    public void openTiles(Tile tile) throws IOException {
-        if (isFirstClick) {
-            isFirstClick = false;
-            plantBombs(tile.x, tile.y);
-        }
-
-        tile.open();
-        if (!tile.isEmpty) return;
-
-        openNeighbors(tile);
-        if (X_TILES * Y_TILES - countOpened == num_bomb){
-            isWin = true;
-            isEnd = true;
-            if (GameController.isWindowOpened == true)
-            gameController.winGame();
-        }
-
-    }
-
-    public void openNeighbors(Tile tile) throws IOException {
-        int [] points = {
-                -1, -1,
-                -1, 0,
-                -1, 1,
-                0, -1,
-                0, 1,
-                1, -1,
-                1, 0,
-                1, 1
-        };
-
-        for (int i = 0; i < points.length; i++){
-            int dx = points[i];
-            int dy = points[++i];
-
-            int newX = tile.x + dx;
-            int newY = tile.y + dy;
-
-            if (newX >= 0 && newX < X_TILES && newY >= 0 && newY < Y_TILES){
-                if (!grid[newX][newY].hasBomb && !grid[newX][newY].isOpened) {
-                    grid[newX][newY].open();
-                    if (X_TILES * Y_TILES - countOpened == num_bomb){
-                        isWin = true;
-                        isEnd = true;
-                        if (GameController.isWindowOpened)
-                            gameController.winGame();
-                    }
-                    if (grid[newX][newY].isEmpty) openNeighbors(grid[newX][newY]);
-                }
-
-            }
-        }
-    }
-
     public void gameOver(int tilex, int tiley){
         timeline.stop();
         score = 100 * X_TILES * Y_TILES - timeArr[0] * 50;
-        isEnd = true;
-
-        if (!isWin) {
-            for (int y = 0; y < Y_TILES; y++){
-                for (int x = 0; x < X_TILES; x++){
-                    if (grid[x][y].hasBomb) grid[x][y].showBomb();
-                }
-            }
-            grid[tilex][tiley].bomb();
-        }
-        else {
-            for (int y = 0; y < Y_TILES; y++){
-                for (int x = 0; x < X_TILES; x++){
-                    if (grid[x][y].hasBomb) grid[x][y].showBomb();
-                }
-            }
-        }
+        Tile.getBombInfo(tilex, tiley);
     }
 
-
+    public static void showGameField(int lengthField) {
+        for (int i = 0; i < lengthField; ++i) {
+            for (int j = 0; j < lengthField; ++j) {
+                if (Tile.getIsMarked(i,j))
+                    System.out.print("f");
+                else if (!Tile.getIsOpened(i,j))
+                    System.out.print("#");
+                else if (Tile.getCountBomb(i,j) >= 0 && Tile.getCountBomb(i,j) <= 9)
+                    System.out.print(Tile.getCountBomb(i,j));
+            }
+            System.out.println("\n");
+        }
+    }
 
     public Integer getLengthField() {
         return lengthField;
@@ -262,13 +148,5 @@ public class GameView {
     public Integer getMinesCount() {
         return num_bomb;
     }
-
-    public int getCountKnown() {
-        return countOpened;
-    }
-
-
-
-
 
 }

@@ -36,7 +36,7 @@ public class Main extends Application {
             launch(args);
         else
         {
-            TextController textgame = new TextController();
+            //TextController textgame = new TextController();
         }
     }
 }

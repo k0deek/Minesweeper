@@ -34,12 +34,13 @@ public class GameController {
 
     public static boolean isWindowOpened = false;
 
-
     public static GameView gameView = new GameView();
-
 
     public void clickedReturn(ActionEvent actionEvent) throws IOException {
         if (gameView.isEnd) return;
+        Tile.setTrueIsFirstClick();
+        Tile.isEnd = false;
+        Tile.isWin = false;
         Parent parent = FXMLLoader.load(getClass().getResource("gameMenu.fxml"));
         Scene gameMenuScene = new Scene(parent);
         Scene mainScene = returnButton.getScene();
@@ -56,24 +57,19 @@ public class GameController {
         if (x > gameView.X_TILES) x--;
         if (y > gameView.Y_TILES) y--;
         Tile thisTile = gameView.grid[x][y];
-
         if (mouseEvent.getButton() == MouseButton.PRIMARY){
-            if (thisTile.hasBomb && !thisTile.isMarked) gameOver(thisTile.x, thisTile.y);
-            else if (!thisTile.isOpened && !thisTile.isMarked) gameView.openTiles(thisTile);
+            thisTile.open(thisTile);
         }
-
         if (mouseEvent.getButton() == MouseButton.SECONDARY){
-            if (thisTile.isOpened) return;
-            if (!thisTile.isMarked){
-                thisTile.isMarked = true;
-                thisTile.mark();
-            }
-            else {
-                thisTile.isMarked = false;
-                thisTile.blank();
-            }
+            thisTile.flag(thisTile);
         }
-
+        if (thisTile.isEnd) {
+            if (thisTile.isWin)
+                winGame();
+            else{
+                gameOver(thisTile.x, thisTile.y);
+                Tile.setTrueIsFirstClick();}
+        }
     }
 
     private void gameOver(int x, int y) throws IOException {
