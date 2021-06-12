@@ -1,5 +1,5 @@
 package sample;
-/*
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,12 +13,10 @@ import sample.*;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static sample.GameController.gameView;
-
 public class TextController {
     final int ExitFlag = 0;
     final int NewGameFlag = 1;
-
+    public static GameView gameView = new GameView();
     public int doGame(GameView model) throws IOException {
         System.out.println("Commands:");
         System.out.println("help");
@@ -53,27 +51,20 @@ public class TextController {
             comArgs = turn.split(" ");
             int x = Integer.parseInt(comArgs[1].trim());
             int y = Integer.parseInt(comArgs[2].trim());
+            Tile thisTile = GameView.grid[x][y];
             if (comArgs[0].equals("open")) {
-                Tile thisTile = GameView.grid[x][y];
-                if (thisTile.hasBomb && !thisTile.isMarked) return NewGameFlag;
-                else if (!thisTile.isOpened && !thisTile.isMarked) thisTile.openTiles(thisTile);
-                else if (thisTile.isOpened) System.out.println("This is already pointed point! Choose another command\n");
-
+                thisTile.open(thisTile);
             }
             if (comArgs[0].equals("flag")) {
-                Tile thisTile = GameView.grid[x][y];
-                if (!thisTile.isOpened) {
-                    if (!thisTile.isMarked) {
-                        thisTile.isMarked = true;
-                        thisTile.mark();
-                    } else {
-                        thisTile.isMarked = false;
-                        thisTile.blank();
-                    }
-                } else System.out.println("This point is already open!");
+                thisTile.flag(thisTile);
             }
-        }while (!(GameView.countMarkedBombs == minesCount) && !(GameView.countOpened == size*size - minesCount));
-        return ExitFlag;
+        }while (!Tile.isEnd);
+        if(Tile.isWin)
+            return ExitFlag;
+        else{
+            Tile.setTrueIsFirstClick();
+            return NewGameFlag;
+        }
     }
 
     public TextController() throws IOException {
@@ -82,17 +73,18 @@ public class TextController {
         int howmuch = scan.nextInt();
         System.out.println("Enter count of mines: ");
         int minesCount = scan.nextInt();
+        GameView model = new GameView();
         int exit_status;
         do {
-            GameView model = new GameView();
+
             model.initialize(howmuch, minesCount);
             exit_status = doGame(model);
+            System.out.println("1 ");
             if (exit_status == 1)
-                System.out.println("You lose!");
-
+                model.ggNt();
         } while (exit_status != 0);
         if ((GameView.countMarkedBombs == minesCount) || (GameView.countOpened == howmuch*howmuch - minesCount)) {
-            System.out.println("You win!");
+            model.ggWp();
         }
     }
-}*/
+}

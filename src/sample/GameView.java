@@ -127,6 +127,14 @@ public class GameView {
         Tile.getBombInfo(tilex, tiley);
     }
 
+    public void ggWp(){
+        System.out.println("You win!");
+    }
+
+    public void ggNt(){
+        System.out.println("You Lose!");
+    }
+
     public static void showGameField(int lengthField) {
         for (int i = 0; i < lengthField; ++i) {
             for (int j = 0; j < lengthField; ++j) {

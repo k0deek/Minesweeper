@@ -114,7 +114,6 @@ public class Tile extends StackPane {
         if (X_TILES * Y_TILES - countOpened == num_bomb){
             isWin = true;
             isEnd = true;
-            Tile.setTrueIsFirstClick();
         }
 
     }
@@ -189,8 +188,6 @@ public class Tile extends StackPane {
         if (countMarkedBombs == num_bomb){
             gameView.isWin = true;
             gameView.isEnd = true;
-            if(GameController.isWindowOpened)
-                gameView.gameController.winGame();
         }
     }
 
@@ -221,7 +218,7 @@ public class Tile extends StackPane {
         return grid[i][j].countBomb;
     }
     public static void getBombInfo(int tilex, int tiley){
-        isEnd = true;
+        if (isEnd = true){
         if (!isWin) {
             for (int y = 0; y < Y_TILES; y++){
                 for (int x = 0; x < X_TILES; x++){
@@ -236,7 +233,8 @@ public class Tile extends StackPane {
                     if (grid[x][y].hasBomb) grid[x][y].showBomb();
                 }
             }
-        }
+        }}
+
         Tile.isEnd = false;
         Tile.isWin = false;
     }

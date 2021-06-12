@@ -64,8 +64,9 @@ public class GameController {
             thisTile.flag(thisTile);
         }
         if (thisTile.isEnd) {
-            if (thisTile.isWin)
+            if (thisTile.isWin){
                 winGame();
+                Tile.setTrueIsFirstClick();}
             else{
                 gameOver(thisTile.x, thisTile.y);
                 Tile.setTrueIsFirstClick();}
